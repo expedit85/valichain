@@ -1,0 +1,31 @@
+{
+  "name": "valichain",
+  "version": "1.0.0",
+  "description": "Validator chain which wraps several functions of String, lodash and chriso/validator",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/expedit85/valichain.git"
+  },
+  "keywords": [
+    "javascript",
+    "node",
+    "validator",
+    "validation-chain",
+    "lodash",
+    "sails"
+  ],
+  "author": "Cristiano Expedito <expedit@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/expedit85/valichain/issues"
+  },
+  "homepage": "https://github.com/expedit85/valichain#readme",
+  "dependencies": {
+    "lodash": "^4.13.1",
+    "validator": "^5.2.0"
+  }
+}
