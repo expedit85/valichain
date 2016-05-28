@@ -83,6 +83,7 @@ function buildSanitizerFunction(f, fnInfo) {	// this does not matter here
 			             f.apply(this.value, args) :	// works for String's functions
 			             f.bind(fnInfo.context, this.value).apply(fnInfo.context, args);
 			this.chain.push(fnInfo.newName);
+			this.valid = true;
 		};
 		fn.info = fnInfo;	// helps debugging
 
@@ -270,7 +271,7 @@ Valichain.prototype.validate = function(input) {
 		f.call(self, self.value);
 	});
 
-	console.log(this);
+	// console.log(this);
 	return this;
 };
 
