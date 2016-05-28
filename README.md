@@ -1,6 +1,6 @@
 # Valichain
 
-Validator chain which wraps several functions of String, lodash and chriso/validator
+Validator chain which wraps several functions of String, lodash and chriso/validator.
 
 
 ## Installation
@@ -36,16 +36,24 @@ Validator chain which wraps several functions of String, lodash and chriso/valid
 
 ## Documentation
 
-Several methods of String, lodash and chriso/validator are wrapped and used with a prefix followed by a '$'. The first argument of the wrapped function is automatically replaced by the current value being validated, so do not pass it.
+For documentation of the Valichain class and its own methods, see [doc.md](doc.md). Besides, several methods of String, lodash and chriso/validator are wrapped and used with a prefix followed by a '$'. The first argument of the wrapped function is automatically replaced by the current value being validated, so do not pass it.
+
+### Samples of usage of wrapped functions
 
 - String's functions:
     - x.trim() => `new V().s$trim().validate(x)`
 
 - lodash's functions:
-    - _.isNumber(x) => `new V()._$isNumber().validate(x)`
+    - _.isNumber(x) => `new V(). _$isNumber().validate(x)`
 
 - chriso/validator's functions:
     - validator.isEmail(x) => `new V().v$isEmail().validate(x)`
+
+For datailed help about wrapped functions, checks its own documentation:
+
+- [Javascript's String class](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/String)
+- [lodash](https://lodash.com)
+- [chriso/validator](https://github.com/chriso/validator.js)
 
 
 ### List of wrapped functions
