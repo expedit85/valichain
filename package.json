@@ -1,6 +1,6 @@
 {
   "name": "valichain",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Validator chain which wraps several functions of String, lodash and chriso/validator",
   "main": "index.js",
   "scripts": {
