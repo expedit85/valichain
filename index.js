@@ -1,5 +1,5 @@
 var v = require('validator');
-var lo = require('lodash');
+var _ = require('lodash');
 var log = false ? console.log : function(){};
 
 
@@ -14,7 +14,7 @@ var log = false ? console.log : function(){};
  */
 function Valichain(input) {
 
-	if (lo.isUndefined(input)) this.deferred = [];
+	if (_.isUndefined(input)) this.deferred = [];
 
 // console.log('this', this);
 	this.resettable = true;
@@ -31,7 +31,7 @@ function Valichain(input) {
 
 
 function buildValidatorFunction(f, fnInfo, negate) {	// this does not matter here
-	negate = lo.isNil(negate) ? false : negate == true;
+	negate = _.isNil(negate) ? false : negate == true;
 
 	var res = function deferredValidator() {	// this is the Valichain instance
 		log('At deferredValidator():', fnInfo);
@@ -49,7 +49,7 @@ function buildValidatorFunction(f, fnInfo, negate) {	// this does not matter her
 			if (!result) {
 				this.fail = fnInfo.newName;
 				this.valid = false;
-				if (!lo.isNil(this.messages)) this.what = this.messages[this.chain.length];
+				if (!_.isNil(this.messages)) this.what = this.messages[this.chain.length];
 			}
 			else {
 				this.chain.push(fnInfo.newName);
@@ -58,7 +58,7 @@ function buildValidatorFunction(f, fnInfo, negate) {	// this does not matter her
 		};
 		fn.info = fnInfo;	// helps debugging
 
-		if (lo.isUndefined(this.input)) this.deferred.push(fn);
+		if (_.isUndefined(this.input)) this.deferred.push(fn);
 		else fn.call(this);
 
 		return this;
@@ -87,7 +87,7 @@ function buildSanitizerFunction(f, fnInfo) {	// this does not matter here
 		};
 		fn.info = fnInfo;	// helps debugging
 
-		if (lo.isUndefined(this.input)) this.deferred.push(fn);
+		if (_.isUndefined(this.input)) this.deferred.push(fn);
 		else fn.call(this);
 
 		return this;
@@ -171,9 +171,9 @@ Valichain.register = function(context, scope, prefix, fn, type) {
 
 
 Valichain.listFunctions = function() {
-	lo(Valichain.prototype)
+	_(Valichain.prototype)
 		.filter(function(e, k) {
-			return lo.isFunction(e);
+			return _.isFunction(e);
 		})
 		.each(function(f) {
 			var i = f.info;
@@ -201,7 +201,7 @@ Valichain.validate = function ValichainValidator(rules, data) {
 		valid : null,
 	};
 
-	lo(rules).each(function(v, k) {
+	_(rules).each(function(v, k) {
 		if (v.constructor.name != "Valichain")
 			throw new Error("invalid rule for " + k);
 
@@ -235,7 +235,7 @@ Valichain.validate = function ValichainValidator(rules, data) {
  * @return {map} null if v is invalid, or a map with param names as keys and final values as values.
  */
 Valichain.extract = function(v) {
-	return lo.isObject(v) && v.valid
+	return _.isObject(v) && v.valid
 		? _.mapValues(v.values, function(v) { return v.value; })
 		: null;
 };
@@ -261,7 +261,7 @@ Valichain.prototype.validate = function(input) {
 	// console.log('validate/this', this);
 
 	var self = this;
-	lo(this.deferred).each(function(f) {
+	_(this.deferred).each(function(f) {
 		var i = f.info;
 		if (i)
 			log(`${f.name + ":" + i.newName}.call(self, ${self.value}::${typeof self.value})`);
@@ -296,7 +296,7 @@ Valichain.prototype.init = function(input) {
 	this.reset();
 	// console.log('init/this', this);
 
-	if (!lo.isUndefined(input)) {
+	if (!_.isUndefined(input)) {
 		this.input = input;
 		this.value = input;
 	}
@@ -312,8 +312,8 @@ Valichain.prototype.init = function(input) {
  * @return {Valichain} this - the same validator instance for chaining.
  */
 Valichain.prototype.msg = function(message) {
-	if (!lo.isNil(this.deferred) && lo.isUndefined(this.input)) {
-		if (lo.isNil(this.messages)) this.messages = [];
+	if (!_.isNil(this.deferred) && _.isUndefined(this.input)) {
+		if (_.isNil(this.messages)) this.messages = [];
 		this.messages[this.deferred.length - 1] = message;
 	}
 	else {
@@ -350,7 +350,7 @@ Valichain.prototype.default = function(value, checkFn) {
 
 	// var args = arguments;
 
-	checkFn = lo.isUndefined(checkFn) ? Valichain.$.isNilOrEmptyString : checkFn;
+	checkFn = _.isUndefined(checkFn) ? Valichain.$.isNilOrEmptyString : checkFn;
 
 	var fn = function defaultSanitizer() {	// this is the Valichain instance
 		log('At defaultSanitizer():', ' / input', this.value);
@@ -367,7 +367,7 @@ Valichain.prototype.default = function(value, checkFn) {
 		this.chain.push('default');
 	};
 
-	if (lo.isUndefined(this.input)) this.deferred.push(fn);
+	if (_.isUndefined(this.input)) this.deferred.push(fn);
 	else fn.call(this);
 
 	return this;
@@ -389,7 +389,7 @@ Valichain.prototype.default = function(value, checkFn) {
  */
 Valichain.prototype.custom = function(fn, type, name) {
 
-	var fnInfo = buildFunctionInfo(global, "custom.", "", name || fn.name || "custom" + lo.random(1000,9999));
+	var fnInfo = buildFunctionInfo(global, "custom.", "", name || fn.name || "custom" + _.random(1000,9999));
 
 	if (fnInfo.newName in Valichain.prototype)
 		throw new Error(`Function '${name}' already exists in Valichain prototype!`);
@@ -404,7 +404,7 @@ Valichain.prototype.custom = function(fn, type, name) {
                 
 	log('custom: ', fnInfo.newName, '->', fn.name, fnInfo.context.constructor.name, fnInfo.originalName);
 
-	// if (lo.isUndefined(this.input)) this.deferred.push(fn);
+	// if (_.isUndefined(this.input)) this.deferred.push(fn);
 	// else fn.call(this, this.value);
 
 	// console.log(fn);
@@ -431,7 +431,7 @@ Valichain.$ = {
 	 * @static
 	 */
 	isNilOrEmptyString : function(v) {
-		return lo.isNil(v) || (lo.isString(v) && lo.isEmpty(v));
+		return _.isNil(v) || (_.isString(v) && _.isEmpty(v));
 	},
 
 	/**
@@ -444,7 +444,7 @@ Valichain.$ = {
 	 * @static
 	 */
 	isNullOrEmptyString : function(v) {
-		return lo.isNull(v) || (lo.isString(v) && lo.isEmpty(v));
+		return _.isNull(v) || (_.isString(v) && _.isEmpty(v));
 	},
 
 	/**
@@ -458,9 +458,9 @@ Valichain.$ = {
 	 * @static
 	 */
 	isNotNilPrimitive : function(v) {
-		return !lo.isNil(v)
-		       && (lo.isString(v) || lo.isNumber(v) || lo.isBoolean)
-		       && !lo.isObject(v);
+		return !_.isNil(v)
+		       && (_.isString(v) || _.isNumber(v) || _.isBoolean)
+		       && !_.isObject(v);
 	},
 };
 
@@ -475,7 +475,7 @@ Valichain.$ = {
 //// Wraps some String functions as sanitizers functions
 (function() {
 	var tmp;
-	lo([
+	_([
 		String.prototype.trim,
 		String.prototype.toLowerCase,
 		String.prototype.toUpperCase,
@@ -489,7 +489,7 @@ Valichain.$ = {
 //// Wraps some String functions as validators functions
 (function() {
 	var tmp;
-	lo([
+	_([
 		String.prototype.startsWith,
 		String.prototype.endsWith,
 	])
@@ -503,15 +503,15 @@ Valichain.$ = {
 (function() {
 	var exclude = [];
 	var include = [];
-	lo(lo)
+	_(_)
 	.filter(function(f, i) {
-		return lo.isFunction(f)
+		return _.isFunction(f)
 		    && (!v.isIn(f.name, exclude)
 		        && f.name.startsWith('is')
 		        || v.isIn(f.name, include));
 	})
 	.each(function(f, i) {
-		Valichain.register(lo, "_.", "_", f, 'validator');
+		Valichain.register(_, "_.", "_", f, 'validator');
 	});
 })();
 
@@ -520,15 +520,15 @@ Valichain.$ = {
 (function() {
 	var exclude = [];
 	var include = [];
-	lo(lo)
+	_(_)
 	.filter(function(f, i) {
-		return lo.isFunction(f)
+		return _.isFunction(f)
 		    && (!v.isIn(f.name, exclude)
 		        && f.name.startsWith('to')
 		        || v.isIn(f.name, include));
 	})
 	.each(function(f, i) {
-		Valichain.register(lo, "_.", "_", f, 'sanitizer');
+		Valichain.register(_, "_.", "_", f, 'sanitizer');
 	});
 })();
 
@@ -537,9 +537,9 @@ Valichain.$ = {
 (function() {
 	var exclude = [];
 	var include = ['matches', 'contains', 'equals'];
-	lo(v)
+	_(v)
 	.filter(function(f, i) {
-		return lo.isFunction(f)
+		return _.isFunction(f)
 		    && (!v.isIn(f.name, exclude)
 		        && f.name.startsWith('is')
 		        || v.isIn(f.name, include));
@@ -559,9 +559,9 @@ Valichain.$ = {
 			'normalizeEmail',
 			'stripLow'
 		];
-	lo(v)
+	_(v)
 	.filter(function(f, i) {
-		return lo.isFunction(f)
+		return _.isFunction(f)
 		    && (!v.isIn(f.name, exclude)
 		        && f.name.startsWith('to')
 		        || v.isIn(f.name, include));
@@ -576,9 +576,9 @@ Valichain.$ = {
 (function() {
 	var exclude = [];
 	var include = [];
-	lo(Valichain.$)
+	_(Valichain.$)
 	.filter(function(f, i) {
-		return lo.isFunction(f)
+		return _.isFunction(f)
 		    && (!v.isIn(f.name, exclude)
 		        && f.name.startsWith('is')
 		        || v.isIn(f.name, include));

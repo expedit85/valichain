@@ -14,8 +14,6 @@ var data = {
 };
 
 
-var v = V(rules, data);
-if (v.valid) data = _.mapValues(v.values, function(v) { return v.value; });
-else data = null;
+data = Valichain.extract(Valichain.validate(rules, data));
 
 console.log(data);
