@@ -194,9 +194,6 @@ Valichain.listFunctions = function() {
  */
 Valichain.validate = function ValichainValidator(rules, data) {
 
-	var rules = arguments[0];
-	var data = arguments[1];
-
 	// if (!_.is)
 
 	var outerVal = {
@@ -205,7 +202,7 @@ Valichain.validate = function ValichainValidator(rules, data) {
 	};
 
 	lo(rules).each(function(v, k) {
-		if (v.constructor !== Valichain)
+		if (v.constructor.name != "Valichain")
 			throw new Error("invalid rule for " + k);
 
 		// console.log('At validata(params, rules)', k, params[k], v);

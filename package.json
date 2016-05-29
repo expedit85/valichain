@@ -28,7 +28,7 @@
   "bugs": {
     "url": "https://github.com/expedit85/valichain/issues"
   },
-  "homepage": "https://github.com/expedit85/valichain#readme",
+  "homepage": "https://github.com/expedit85/valichain#README.md",
   "dependencies": {
     "lodash": "^4.13.1",
     "validator": "^5.2.0"
