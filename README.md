@@ -1,5 +1,8 @@
 # Valichain
 
+[![NPM version][npm-image]][npm-url]
+[![Downloads][downloads-image]][npm-url]
+
 Validator chain which wraps several functions of String, lodash and chriso/validator.
 
 
@@ -257,3 +260,6 @@ Sanitizer: v$toString   ==> chriso/validator.toString
 MIT: [LICENSE](LICENSE).
 
 
+[npm-url]: https://www.npmjs.com/package/valichain
+[npm-image]: http://img.shields.io/npm/v/valichain.svg
+[downloads-image]: http://img.shields.io/npm/dm/valichain.svg
